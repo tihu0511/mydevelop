@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.hsq.wjg.demo.codeGenetor.dao.IRegularAssetDao">
+    <sql id="queryRegularAssetAllColumn">
+        SELECT
+            ID AS id,
+            ASSET_SERIAL AS assetSerial,
+            MERCHANT_CODE AS merchantCode,
+            PRODUCT_CODE AS productCode,
+            PRODUCT_NAME AS productName,
+            YEAR_RATE AS yearRate,
+            INVERST_TERM AS inverstTerm,
+            INVERST_BALANCE AS inverstBalance,
+            INVERST_DATE AS inverstDate,
+            START_ACCRUAL_DATE AS startAccrualDate,
+            END_ACCRUAL_DATE AS endAccrualDate,
+            EXPECTED_ACCRUAL AS expectedAccrual,
+            IS_PAY_BACK AS isPayBack,
+            CREATE_TIME AS createTime,
+            UPDATE_TIME AS updateTime,
+        FROM HSQ_QYLC_REGULAR.REGULAR_ASSET
+    </sql>
+
+    <select id="queryById" resultType="org.hsq.wjg.demo.codeGenetor.entity.RegularAsset">
+        <include refid="queryRegularAssetAllColumn"/>
+        WHERE ID = #{id}
+    </select>
+
+    <select id="query" resultType="org.hsq.wjg.demo.codeGenetor.entity.RegularAsset">
+        <include refid="queryRegularAssetAllColumn"/>
+        WHERE 1 = 1
+        <if test="id != null">
+            AND ID = #{id}
+        </if>
+        <if test="assetSerial != null">
+            AND ASSET_SERIAL = #{assetSerial}
+        </if>
+        <if test="merchantCode != null">
+            AND MERCHANT_CODE = #{merchantCode}
+        </if>
+        <if test="productCode != null">
+            AND PRODUCT_CODE = #{productCode}
+        </if>
+        <if test="productName != null">
+            AND PRODUCT_NAME = #{productName}
+        </if>
+        <if test="yearRate != null">
+            AND YEAR_RATE = #{yearRate}
+        </if>
+        <if test="inverstTerm != null">
+            AND INVERST_TERM = #{inverstTerm}
+        </if>
+        <if test="inverstBalance != null">
+            AND INVERST_BALANCE = #{inverstBalance}
+        </if>
+        <if test="inverstDate != null">
+            AND INVERST_DATE = #{inverstDate}
+        </if>
+        <if test="startAccrualDate != null">
+            AND START_ACCRUAL_DATE = #{startAccrualDate}
+        </if>
+        <if test="endAccrualDate != null">
+            AND END_ACCRUAL_DATE = #{endAccrualDate}
+        </if>
+        <if test="expectedAccrual != null">
+            AND EXPECTED_ACCRUAL = #{expectedAccrual}
+        </if>
+        <if test="isPayBack != null">
+            AND IS_PAY_BACK = #{isPayBack}
+        </if>
+        <if test="createTime != null">
+            AND CREATE_TIME = #{createTime}
+        </if>
+        <if test="updateTime != null">
+            AND UPDATE_TIME = #{updateTime}
+        </if>
+    </select>
+
+    <insert id="add" keyProperty="id" useGeneratedKeys="true" parameterType="org.hsq.wjg.demo.codeGenetor.entity.RegularAsset">
+        INSERT INTO HSQ_QYLC_REGULAR.REGULAR_ASSET(
+            ASSET_SERIAL,
+            MERCHANT_CODE,
+            PRODUCT_CODE,
+            <if test="productName != null">
+                PRODUCT_NAME,
+            </if>
+            <if test="yearRate != null">
+                YEAR_RATE,
+            </if>
+            <if test="inverstTerm != null">
+                INVERST_TERM,
+            </if>
+            <if test="inverstBalance != null">
+                INVERST_BALANCE,
+            </if>
+            <if test="inverstDate != null">
+                INVERST_DATE,
+            </if>
+            <if test="startAccrualDate != null">
+                START_ACCRUAL_DATE,
+            </if>
+            <if test="endAccrualDate != null">
+                END_ACCRUAL_DATE,
+            </if>
+            <if test="expectedAccrual != null">
+                EXPECTED_ACCRUAL,
+            </if>
+            <if test="isPayBack != null">
+                IS_PAY_BACK,
+            </if>
+            CREATE_TIME,
+            <if test="updateTime != null">
+                UPDATE_TIME,
+            </if>
+        ) values (
+            #{ASSET_SERIAL},
+            #{MERCHANT_CODE},
+            #{PRODUCT_CODE},
+            <if test="productName != null">
+                #{productName},
+            </if>
+            <if test="yearRate != null">
+                #{yearRate},
+            </if>
+            <if test="inverstTerm != null">
+                #{inverstTerm},
+            </if>
+            <if test="inverstBalance != null">
+                #{inverstBalance},
+            </if>
+            <if test="inverstDate != null">
+                #{inverstDate},
+            </if>
+            <if test="startAccrualDate != null">
+                #{startAccrualDate},
+            </if>
+            <if test="endAccrualDate != null">
+                #{endAccrualDate},
+            </if>
+            <if test="expectedAccrual != null">
+                #{expectedAccrual},
+            </if>
+            <if test="isPayBack != null">
+                #{isPayBack},
+            </if>
+            #{CREATE_TIME},
+            <if test="updateTime != null">
+                #{updateTime},
+            </if>
+        )
+    </insert>
+    <update id="update" parameterType="org.hsq.wjg.demo.codeGenetor.entity.RegularAsset">
+        UPDATE HSQ_QYLC_REGULAR.REGULAR_ASSET set
+        <if test="assetSerial != null">
+            ASSET_SERIAL = #{assetSerial},
+        </if>
+        <if test="merchantCode != null">
+            MERCHANT_CODE = #{merchantCode},
+        </if>
+        <if test="productCode != null">
+            PRODUCT_CODE = #{productCode},
+        </if>
+        <if test="productName != null">
+            PRODUCT_NAME = #{productName},
+        </if>
+        <if test="yearRate != null">
+            YEAR_RATE = #{yearRate},
+        </if>
+        <if test="inverstTerm != null">
+            INVERST_TERM = #{inverstTerm},
+        </if>
+        <if test="inverstBalance != null">
+            INVERST_BALANCE = #{inverstBalance},
+        </if>
+        <if test="inverstDate != null">
+            INVERST_DATE = #{inverstDate},
+        </if>
+        <if test="startAccrualDate != null">
+            START_ACCRUAL_DATE = #{startAccrualDate},
+        </if>
+        <if test="endAccrualDate != null">
+            END_ACCRUAL_DATE = #{endAccrualDate},
+        </if>
+        <if test="expectedAccrual != null">
+            EXPECTED_ACCRUAL = #{expectedAccrual},
+        </if>
+        <if test="isPayBack != null">
+            IS_PAY_BACK = #{isPayBack},
+        </if>
+        <if test="createTime != null">
+            CREATE_TIME = #{createTime},
+        </if>
+        <if test="updateTime != null">
+            UPDATE_TIME = #{updateTime},
+        </if>
+        WHERE ID = #{id}
+    </update>
+</mapper>

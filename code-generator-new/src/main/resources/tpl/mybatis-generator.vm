@@ -1,0 +1,12 @@
+import com.hsq.component.generator.MybatisGenerator;
+
+import java.io.IOException;
+
+/**
+* Unit test for simple App.
+*/
+public class MybatisGeneratorTest {
+    public static void main(String[] args) throws IOException {
+        new MybatisGenerator().generator();
+    }
+}

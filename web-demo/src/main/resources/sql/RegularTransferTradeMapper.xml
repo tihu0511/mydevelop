@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.hsq.wjg.demo.codeGenetor.dao.IRegularTransferTradeDao">
+    <sql id="queryRegularTransferTradeAllColumn">
+        SELECT
+            ID AS id,
+            ORDER_NO AS orderNo,
+            MERCHANT_CODE AS merchantCode,
+            PRODUCT_CODE AS productCode,
+            PAY_ORDER_NO AS payOrderNo,
+            TRADE_TYPE AS tradeType,
+            OPER_ORDER_NO AS operOrderNo,
+            PRODUCT_NAME AS productName,
+            TRADE_TIME AS tradeTime,
+            AMOUNT AS amount,
+            STATE AS state,
+            REMARK AS remark,
+            CREATE_TIME AS createTime,
+            UPDATE_TIME AS updateTime,
+        FROM HSQ_QYLC_REGULAR.REGULAR_TRANSFER_TRADE
+    </sql>
+
+    <select id="queryById" resultType="org.hsq.wjg.demo.codeGenetor.entity.RegularTransferTrade">
+        <include refid="queryRegularTransferTradeAllColumn"/>
+        WHERE ID = #{id}
+    </select>
+
+    <select id="query" resultType="org.hsq.wjg.demo.codeGenetor.entity.RegularTransferTrade">
+        <include refid="queryRegularTransferTradeAllColumn}"/>
+        WHERE 1 = 1
+        <if test="id != null">
+            AND ID = #{id}
+        </if>
+        <if test="orderNo != null">
+            AND ORDER_NO = #{orderNo}
+        </if>
+        <if test="merchantCode != null">
+            AND MERCHANT_CODE = #{merchantCode}
+        </if>
+        <if test="productCode != null">
+            AND PRODUCT_CODE = #{productCode}
+        </if>
+        <if test="payOrderNo != null">
+            AND PAY_ORDER_NO = #{payOrderNo}
+        </if>
+        <if test="tradeType != null">
+            AND TRADE_TYPE = #{tradeType}
+        </if>
+        <if test="operOrderNo != null">
+            AND OPER_ORDER_NO = #{operOrderNo}
+        </if>
+        <if test="productName != null">
+            AND PRODUCT_NAME = #{productName}
+        </if>
+        <if test="tradeTime != null">
+            AND TRADE_TIME = #{tradeTime}
+        </if>
+        <if test="amount != null">
+            AND AMOUNT = #{amount}
+        </if>
+        <if test="state != null">
+            AND STATE = #{state}
+        </if>
+        <if test="remark != null">
+            AND REMARK = #{remark}
+        </if>
+        <if test="createTime != null">
+            AND CREATE_TIME = #{createTime}
+        </if>
+        <if test="updateTime != null">
+            AND UPDATE_TIME = #{updateTime}
+        </if>
+    </select>
+
+    <insert id="add" keyProperty="id" useGeneratedKeys="true" parameterType="org.hsq.wjg.demo.codeGenetor.entity.RegularTransferTrade">
+        INSERT INTO HSQ_QYLC_REGULAR.REGULAR_TRANSFER_TRADE(
+            <if test="orderNo != null">
+                ORDER_NO,
+            </if>
+            <if test="merchantCode != null">
+                MERCHANT_CODE,
+            </if>
+            <if test="productCode != null">
+                PRODUCT_CODE,
+            </if>
+            <if test="payOrderNo != null">
+                PAY_ORDER_NO,
+            </if>
+            <if test="tradeType != null">
+                TRADE_TYPE,
+            </if>
+            <if test="operOrderNo != null">
+                OPER_ORDER_NO,
+            </if>
+            <if test="productName != null">
+                PRODUCT_NAME,
+            </if>
+            <if test="tradeTime != null">
+                TRADE_TIME,
+            </if>
+            <if test="amount != null">
+                AMOUNT,
+            </if>
+            <if test="state != null">
+                STATE,
+            </if>
+            <if test="remark != null">
+                REMARK,
+            </if>
+            CREATE_TIME,
+            <if test="updateTime != null">
+                UPDATE_TIME,
+            </if>
+        ) values (
+            <if test="orderNo != null">
+                #{orderNo},
+            </if>
+            <if test="merchantCode != null">
+                #{merchantCode},
+            </if>
+            <if test="productCode != null">
+                #{productCode},
+            </if>
+            <if test="payOrderNo != null">
+                #{payOrderNo},
+            </if>
+            <if test="tradeType != null">
+                #{tradeType},
+            </if>
+            <if test="operOrderNo != null">
+                #{operOrderNo},
+            </if>
+            <if test="productName != null">
+                #{productName},
+            </if>
+            <if test="tradeTime != null">
+                #{tradeTime},
+            </if>
+            <if test="amount != null">
+                #{amount},
+            </if>
+            <if test="state != null">
+                #{state},
+            </if>
+            <if test="remark != null">
+                #{remark},
+            </if>
+            #{CREATE_TIME},
+            <if test="updateTime != null">
+                #{updateTime},
+            </if>
+        )
+    </insert>
+    <update id="update" parameterType="org.hsq.wjg.demo.codeGenetor.entity.RegularAsset">
+        UPDATE HSQ_QYLC_REGULAR.REGULAR_TRANSFER_TRADE set
+        <if test="orderNo != null">
+            ORDER_NO = #{orderNo},
+        </if>
+        <if test="merchantCode != null">
+            MERCHANT_CODE = #{merchantCode},
+        </if>
+        <if test="productCode != null">
+            PRODUCT_CODE = #{productCode},
+        </if>
+        <if test="payOrderNo != null">
+            PAY_ORDER_NO = #{payOrderNo},
+        </if>
+        <if test="tradeType != null">
+            TRADE_TYPE = #{tradeType},
+        </if>
+        <if test="operOrderNo != null">
+            OPER_ORDER_NO = #{operOrderNo},
+        </if>
+        <if test="productName != null">
+            PRODUCT_NAME = #{productName},
+        </if>
+        <if test="tradeTime != null">
+            TRADE_TIME = #{tradeTime},
+        </if>
+        <if test="amount != null">
+            AMOUNT = #{amount},
+        </if>
+        <if test="state != null">
+            STATE = #{state},
+        </if>
+        <if test="remark != null">
+            REMARK = #{remark},
+        </if>
+        <if test="createTime != null">
+            CREATE_TIME = #{createTime},
+        </if>
+        <if test="updateTime != null">
+            UPDATE_TIME = #{updateTime},
+        </if>
+        WHERE ID = #{id}
+    </update>
+</mapper>

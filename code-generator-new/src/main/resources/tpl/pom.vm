@@ -1,0 +1,58 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+#if($pom.parent)
+    <parent>
+        <groupId>$pom.parent.groupId</groupId>
+        <artifactId>$pom.parent.artifactId</artifactId>
+        <version>$pom.parent.version</version>
+    </parent>
+#end
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>$pom.module.groupId</groupId>
+    <artifactId>$pom.module.artifactId</artifactId>
+    <packaging>$pom.module.mavenType</packaging>
+    <version>$pom.module.version</version>
+#if($pom.subModules)
+    <modules>
+#foreach($subModuleName in $pom.subModules)
+        <module>$subModuleName</module>
+#end
+    </modules>
+#end
+
+    <name>$pom.module.artifactId Maven</name>
+    <url>http://maven.apache.org</url>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+#if($pom.dependencies)
+    <dependencies>
+#foreach($dependency in $pom.dependencies)
+        <dependency>
+            <groupId>$dependency.groupId</groupId>
+            <artifactId>$dependency.artifactId</artifactId>
+#if($dependency.version)
+            <version>$dependency.version</version>
+#end
+#if($dependency.excludes)
+            <exclusions>
+#foreach($exclude in $dependency.excludes)
+                <exclusion>
+                    <groupId>$exclude.groupId</groupId>
+                    <artifactId>$exclude.artifactId</artifactId>
+                </exclusion>
+#end
+            </exclusions>
+#end
+        </dependency>
+#end
+    </dependencies>
+#end
+
+    <build>
+        <finalName>$pom.module.artifactId</finalName>
+    </build>
+</project>

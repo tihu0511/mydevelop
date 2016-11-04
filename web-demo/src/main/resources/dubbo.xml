@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://code.alibabatech.com/schema/dubbo
+            http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+    <!-- 应用名，用于计算依赖关系-->
+    <!--模版-->
+    <dubbo:application name="hsq-wjg-demo" />
+    <!-- 使用zookeeper注册中心暴露服务地址 -->
+    <dubbo:registry  protocol="zookeeper" address="${dubbo.zookeeper.ip}"  register="${dubbo.registry.register}"/>
+
+    <!-- 用dubbo协议暴露服务 -->
+    <dubbo:protocol name="dubbo" port="${dubbo.port}"/>
+
+    <dubbo:provider filter="LogProviderFilter" timeout="30000" />
+
+    <dubbo:consumer  check="false" timeout="30000" filter="LogConsumerFilter"/>
+
+    <!-- dubbo调用服务 -->
+    <import resource="dubbo-reference.xml"/>
+
+</beans>

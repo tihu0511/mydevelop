@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.hsq.wjg.demo.codeGenetor.dao.IRegularRedeemDao">
+    <sql id="queryRegularRedeemAllColumn">
+        SELECT
+            ID AS id,
+            ORDER_NO AS orderNo,
+            ASSET_ID AS assetId,
+            BALANCE AS balance,
+            ACCRUAL AS accrual,
+            STATE AS state,
+            CREATE_TIME AS createTime,
+            UPDATE_TIME AS updateTime,
+        FROM HSQ_QYLC_REGULAR.REGULAR_REDEEM
+    </sql>
+
+    <select id="queryById" resultType="org.hsq.wjg.demo.codeGenetor.entity.RegularRedeem">
+        <include refid="queryRegularRedeemAllColumn"/>
+        WHERE ID = #{id}
+    </select>
+
+    <select id="query" resultType="org.hsq.wjg.demo.codeGenetor.entity.RegularRedeem">
+        <include refid="queryRegularRedeemAllColumn}"/>
+        WHERE 1 = 1
+        <if test="id != null">
+            AND ID = #{id}
+        </if>
+        <if test="orderNo != null">
+            AND ORDER_NO = #{orderNo}
+        </if>
+        <if test="assetId != null">
+            AND ASSET_ID = #{assetId}
+        </if>
+        <if test="balance != null">
+            AND BALANCE = #{balance}
+        </if>
+        <if test="accrual != null">
+            AND ACCRUAL = #{accrual}
+        </if>
+        <if test="state != null">
+            AND STATE = #{state}
+        </if>
+        <if test="createTime != null">
+            AND CREATE_TIME = #{createTime}
+        </if>
+        <if test="updateTime != null">
+            AND UPDATE_TIME = #{updateTime}
+        </if>
+    </select>
+
+    <insert id="add" keyProperty="id" useGeneratedKeys="true" parameterType="org.hsq.wjg.demo.codeGenetor.entity.RegularRedeem">
+        INSERT INTO HSQ_QYLC_REGULAR.REGULAR_REDEEM(
+            <if test="orderNo != null">
+                ORDER_NO,
+            </if>
+            <if test="assetId != null">
+                ASSET_ID,
+            </if>
+            <if test="balance != null">
+                BALANCE,
+            </if>
+            <if test="accrual != null">
+                ACCRUAL,
+            </if>
+            <if test="state != null">
+                STATE,
+            </if>
+            CREATE_TIME,
+            <if test="updateTime != null">
+                UPDATE_TIME,
+            </if>
+        ) values (
+            <if test="orderNo != null">
+                #{orderNo},
+            </if>
+            <if test="assetId != null">
+                #{assetId},
+            </if>
+            <if test="balance != null">
+                #{balance},
+            </if>
+            <if test="accrual != null">
+                #{accrual},
+            </if>
+            <if test="state != null">
+                #{state},
+            </if>
+            #{CREATE_TIME},
+            <if test="updateTime != null">
+                #{updateTime},
+            </if>
+        )
+    </insert>
+    <update id="update" parameterType="org.hsq.wjg.demo.codeGenetor.entity.RegularAsset">
+        UPDATE HSQ_QYLC_REGULAR.REGULAR_REDEEM set
+        <if test="orderNo != null">
+            ORDER_NO = #{orderNo},
+        </if>
+        <if test="assetId != null">
+            ASSET_ID = #{assetId},
+        </if>
+        <if test="balance != null">
+            BALANCE = #{balance},
+        </if>
+        <if test="accrual != null">
+            ACCRUAL = #{accrual},
+        </if>
+        <if test="state != null">
+            STATE = #{state},
+        </if>
+        <if test="createTime != null">
+            CREATE_TIME = #{createTime},
+        </if>
+        <if test="updateTime != null">
+            UPDATE_TIME = #{updateTime},
+        </if>
+        WHERE ID = #{id}
+    </update>
+</mapper>

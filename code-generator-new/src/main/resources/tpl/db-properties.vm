@@ -1,0 +1,11 @@
+#数据库配置
+jdbc.driver=com.mysql.jdbc.Driver
+jdbc.urlMA=jdbc:mysql://10.0.20.108:3306/HSQ_QYLC_REGULAR?useUnicode=true&characterEncoding=utf8
+jdbc.username=baofoo
+jdbc.password=mandao@64//
+jdbc.initialPoolSize=1
+jdbc.minPoolSize=0
+jdbc.maxPoolSize=10
+jdbc.acquireIncrement=5
+jdbc.maxIdleTime=10
+jdbc.maxStatements=0

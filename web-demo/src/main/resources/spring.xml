@@ -56,4 +56,6 @@
 	<!-- 声明使用注解式事务 -->
 	<tx:annotation-driven transaction-manager="transactionManager"  proxy-target-class="true"/>
 
+	<import resource="dubbo.xml" />
+
 </beans>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.hsq.wjg.demo.codeGenetor.dao.IRegularHolidayDao">
+    <sql id="queryRegularHolidayAllColumn">
+        SELECT
+            ID AS id,
+            DAY AS day,
+            DESC AS desc,
+            STATE AS state,
+            CREATE_TIME AS createTime,
+            UPDATE_TIME AS updateTime,
+        FROM HSQ_QYLC_REGULAR.REGULAR_HOLIDAY
+    </sql>
+
+    <select id="queryById" resultType="org.hsq.wjg.demo.codeGenetor.entity.RegularHoliday">
+        <include refid="queryRegularHolidayAllColumn"/>
+        WHERE ID = #{id}
+    </select>
+
+    <select id="query" resultType="org.hsq.wjg.demo.codeGenetor.entity.RegularHoliday">
+        <include refid="queryRegularHolidayAllColumn}"/>
+        WHERE 1 = 1
+        <if test="id != null">
+            AND ID = #{id}
+        </if>
+        <if test="day != null">
+            AND DAY = #{day}
+        </if>
+        <if test="desc != null">
+            AND DESC = #{desc}
+        </if>
+        <if test="state != null">
+            AND STATE = #{state}
+        </if>
+        <if test="createTime != null">
+            AND CREATE_TIME = #{createTime}
+        </if>
+        <if test="updateTime != null">
+            AND UPDATE_TIME = #{updateTime}
+        </if>
+    </select>
+
+    <insert id="add" keyProperty="id" useGeneratedKeys="true" parameterType="org.hsq.wjg.demo.codeGenetor.entity.RegularHoliday">
+        INSERT INTO HSQ_QYLC_REGULAR.REGULAR_HOLIDAY(
+            DAY,
+            <if test="desc != null">
+                DESC,
+            </if>
+            STATE,
+            CREATE_TIME,
+            <if test="updateTime != null">
+                UPDATE_TIME,
+            </if>
+        ) values (
+            #{DAY},
+            <if test="desc != null">
+                #{desc},
+            </if>
+            #{STATE},
+            #{CREATE_TIME},
+            <if test="updateTime != null">
+                #{updateTime},
+            </if>
+        )
+    </insert>
+    <update id="update" parameterType="org.hsq.wjg.demo.codeGenetor.entity.RegularAsset">
+        UPDATE HSQ_QYLC_REGULAR.REGULAR_HOLIDAY set
+        <if test="day != null">
+            DAY = #{day},
+        </if>
+        <if test="desc != null">
+            DESC = #{desc},
+        </if>
+        <if test="state != null">
+            STATE = #{state},
+        </if>
+        <if test="createTime != null">
+            CREATE_TIME = #{createTime},
+        </if>
+        <if test="updateTime != null">
+            UPDATE_TIME = #{updateTime},
+        </if>
+        WHERE ID = #{id}
+    </update>
+</mapper>

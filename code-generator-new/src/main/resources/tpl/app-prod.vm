@@ -1,0 +1,8 @@
+#环境信息 test-测试环境 product-生产环境
+environment=product
+
+#dubbo配置
+dubbo.zookeeper.ip=192.168.190.11:2181,192.168.190.12:2181,192.168.190.13:2181,192.168.110.14:2181
+dubbo.port=50880
+#是否注册服务
+dubbo.registry.register=true

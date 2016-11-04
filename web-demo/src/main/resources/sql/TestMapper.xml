@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="org.hsq.wjg.demo.dao.ITestDao">
-    <select id="queryMemberBank" resultType="java.lang.String">
-        /*SELECT DES_DECRYPT(UNHEX(bank_account), ${@org.hsq.wjg.demo.constants.DemoConstants@SECRET_STR})*/
-        SELECT DES_DECRYPT(UNHEX(bank_account), ${@org.hsq.wjg.demo.constants.DemoEnum@TEST_SECRET.getValue()})
-        FROM BAOFOO_APP.`app_member_bank` WHERE member_id = #{memberId};
-    </select>
-</mapper>
