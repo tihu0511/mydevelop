@@ -21,24 +21,24 @@ import java.util.Map;
  */
 public abstract class AbstractGenerator {
     protected static final String POM_TPL_PATH = "/tpl/pom.vm";
-    protected static final String SPRING_TPL_PATH = "/tpl/spring.vm";
-    protected static final String SPRING_DB_TPL_PATH = "/tpl/spring-db.vm";
-    protected static final String DUBBO_TPL_PATH = "/tpl/dubbo.vm";
-    protected static final String DUBBO_SERVICE_TPL_PATH = "/tpl/dubbo-service.vm";
-    protected static final String DUBBO_REFERENCE_TPL_PATH = "/tpl/dubbo-reference.vm";
-    protected static final String DUBBO_LOG_TPL_PATH = "/tpl/logDubboConf.vm";
-    protected static final String APP_PROP_TPL_PATH = "/tpl/app.vm";
-    protected static final String APP_PROD_PROP_TPL_PATH = "/tpl/app-prod.vm";
-    protected static final String DB_PROP_TPL_PATH = "/tpl/db-properties.vm";
-    protected static final String LOG4J_TPL_PATH = "/tpl/log4j.vm";
-    protected static final String WEB_XML_TPL_PATH = "/tpl/web.vm";
-    protected static final String INDEX_JSP_TPL_PATH = "/tpl/index-jsp.vm";
-    protected static final String MYBATIS_GENERATOR_CODE_TPL_PATH = "/tpl/mybatis-generator.vm";
-    protected static final String MYBATIS_GENERATOR_PROP_TPL_PATH = "/tpl/mybatis-generator-prop.vm";
-    protected static final String CONSTANTS_TPL_PATH = "/tpl/constants.vm";
-    protected static final String MSG_ENUM_TPL_PATH = "/tpl/msgEnum.vm";
-    protected static final String EXCEPTION_TPL_PATH = "/tpl/exception.vm";
-    protected static final String TEST_JAVA_TPL_PATH = "/tpl/test-java.vm";
+    protected static final String SPRING_TPL_PATH = "/tpl/resources/spring.vm";
+    protected static final String SPRING_DB_TPL_PATH = "/tpl/resources/spring-db.vm";
+    protected static final String DUBBO_TPL_PATH = "/tpl/resources/dubbo.vm";
+    protected static final String DUBBO_SERVICE_TPL_PATH = "/tpl/resources/dubbo-service.vm";
+    protected static final String DUBBO_REFERENCE_TPL_PATH = "/tpl/resources/dubbo-reference.vm";
+    protected static final String DUBBO_LOG_TPL_PATH = "/tpl/resources/logDubboConf.vm";
+    protected static final String APP_PROP_TPL_PATH = "/tpl/resources/app.vm";
+    protected static final String APP_PROD_PROP_TPL_PATH = "/tpl/resources/app-prod.vm";
+    protected static final String DB_PROP_TPL_PATH = "/tpl/resources/db-properties.vm";
+    protected static final String LOG4J_TPL_PATH = "/tpl/resources/log4j.vm";
+    protected static final String WEB_XML_TPL_PATH = "/tpl/webapp/web.vm";
+    protected static final String INDEX_JSP_TPL_PATH = "/tpl/webapp/index-jsp.vm";
+    protected static final String MYBATIS_GENERATOR_CODE_TPL_PATH = "/tpl/test/mybatis-generator.vm";
+    protected static final String MYBATIS_GENERATOR_PROP_TPL_PATH = "/tpl/test/mybatis-generator-prop.vm";
+    protected static final String CONSTANTS_TPL_PATH = "/tpl/java/constants.vm";
+    protected static final String MSG_ENUM_TPL_PATH = "/tpl/java/msgEnum.vm";
+    protected static final String EXCEPTION_TPL_PATH = "/tpl/java/exception.vm";
+    protected static final String TEST_JAVA_TPL_PATH = "/tpl/test/test-java.vm";
 
     protected ProjectInfo projectInfo;
 
