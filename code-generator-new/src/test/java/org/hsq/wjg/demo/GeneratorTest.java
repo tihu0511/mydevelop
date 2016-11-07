@@ -24,6 +24,18 @@ public class GeneratorTest {
         Generator.generator(projectInfo);
     }
 
+    @Test
+    public void generatorMandaoProdFb() throws IOException {
+        ProjectInfo projectInfo = new ProjectInfo();
+        projectInfo.setDirectory("F:\\CODE\\baofoo\\mandao-asset\\prod-fb-parent");
+        projectInfo.setName("prod-fb");
+        projectInfo.setStyle(ProjectStyleEnum.SIMPLE_INTERFACE);
+        projectInfo.setMainPackage("com.mandao.asset.prod.fb");
+        projectInfo.setGroupId("com.mandao.asset");
+        projectInfo.addFrameworks(FrameworkEnum.SPRING_WEB, FrameworkEnum.MYBATIES, FrameworkEnum.DUBBO, FrameworkEnum.HSQ_COMPONENT, FrameworkEnum.LOG4J);
+        Generator.generator(projectInfo);
+    }
+
 
     @Test
     public void generatorAssetFb() throws IOException {

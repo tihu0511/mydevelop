@@ -12,7 +12,7 @@ public class SqlGenerateTest {
     @Test
     public void generate() throws IOException {
         String file = "D:\\Desktop\\测试-代码生成.xlsx";
-        String schemaName = "wjgtemp";
+        String schemaName = "MANDAO_PROD_FB";
         String resourcesPath = "F:\\CODE\\demos\\mydevelop\\code-generator-new\\src\\main";
         new SqlGenerator(schemaName, resourcesPath).generate(file);
     }

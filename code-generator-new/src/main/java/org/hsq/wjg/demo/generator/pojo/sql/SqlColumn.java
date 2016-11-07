@@ -42,7 +42,7 @@ public class SqlColumn {
         this.defaultValue = defaultValue;
     }
 
-    public boolean isNotNullable() {
+    public boolean getIsNotNullable() {
         return isNotNullable;
     }
 

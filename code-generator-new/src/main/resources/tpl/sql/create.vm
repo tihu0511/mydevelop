@@ -9,10 +9,11 @@ CREATE TABLE `$table.name.toUpperCase()` (
     `ID` int(11) NOT NULL AUTO_INCREMENT,
 #foreach($column in $table.sqlColumns)
 #set($nullableStr = "NULL")
+#set($defaultStr = "DEFAULT NULL")
 #if($column.isNotNullable)
 #set($nullableStr = "NOT NULL")
+#set($defaultStr = "")
 #end
-#set($defaultStr = "DEFAULT NULL")
 #if($column.defaultValue)
 #set($defaultStr = "DEFAULT " + $column.defaultValue)
 #end
