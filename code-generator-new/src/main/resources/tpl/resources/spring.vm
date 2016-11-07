@@ -12,8 +12,8 @@
         <property name="locations">
             <list>
                 <!--模版文件夹-->
-                <value>file:/data/mondao/asset/${rootName}/$moduleName/app.properties</value>
-                <value>file:/data/mondao/asset/${rootName}/$moduleName/db.properties</value>
+                <value>file:/data/mandao/asset/${rootName}/$moduleName/app.properties</value>
+                <value>file:/data/mandao/asset/${rootName}/$moduleName/db.properties</value>
             </list>
         </property>
     </bean>

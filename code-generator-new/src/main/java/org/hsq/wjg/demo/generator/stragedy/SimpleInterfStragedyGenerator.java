@@ -113,13 +113,82 @@ public class SimpleInterfStragedyGenerator extends AbstractGenerator implements 
         generatePom(modulePath + File.separator + "pom.xml", pom);
 
         //生成resources下的配置文件
-        generatedResources();
+        generateResources();
+
+        generateTest();
+
+        generateJavaCode();
+    }
+
+    /**
+     * 生成java代码
+     * @throws IOException
+     */
+    private void generateJavaCode() throws IOException {
+        //javaCode package
+        String packagePath = javaCodePath + File.separator + projectInfo.getMainPackage().replace(".", File.separator);
+        String constantsPath = packagePath + File.separator + "constants";
+        String daoPath = packagePath + File.separator + "dao";
+        String entityPath = packagePath + File.separator + "entity";
+        String enumsPath = packagePath + File.separator + "enums";
+        String servicePath = packagePath + File.separator + "service";
+        String exceptionPath = packagePath + File.separator + "exception";
+        String utilPath = packagePath + File.separator + "util";
+        String wsPath = packagePath + File.separator + "ws";
+        FileUtil.mkdirs(constantsPath, daoPath, entityPath, enumsPath, servicePath, exceptionPath, utilPath, wsPath);
+
+        //constants
+        String moduleName = projectInfo.getName();
+        String moduleCamelName = getCamelName(moduleName);
+        String generatedTime = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date());
+        Map<String, Object> constantsParams = new HashMap<String, Object>();
+        constantsParams.put("mainPackage", projectInfo.getMainPackage());
+        constantsParams.put("generatedTime", generatedTime);
+        constantsParams.put("moduleCamelName", moduleCamelName);
+        FileUtil.writeFile(constantsPath + File.separator + moduleCamelName + "Constant.java", ResourcesTemplateUtil.getTemplateContent(constantsParams, CONSTANTS_TPL_PATH), GeneratorConstants.DEFAULT_CHARSET);
+
+        //MsgEnum
+        String module_SplitName = moduleName.replace("-", "_");
+        Map<String, Object> msgEnumParams = new HashMap<String, Object>();
+        msgEnumParams.put("mainPackage", projectInfo.getMainPackage());
+        msgEnumParams.put("generatedTime", generatedTime);
+        msgEnumParams.put("moduleCamelName", moduleCamelName);
+        msgEnumParams.put("module_SplitName", module_SplitName);
+        FileUtil.writeFile(enumsPath + File.separator + moduleCamelName + "MsgEnum.java", ResourcesTemplateUtil.getTemplateContent(msgEnumParams, MSG_ENUM_TPL_PATH), GeneratorConstants.DEFAULT_CHARSET);
+
+        //exception
+        Map<String, Object> exceptionParams = new HashMap<String, Object>();
+        exceptionParams.put("mainPackage", projectInfo.getMainPackage());
+        exceptionParams.put("generatedTime", generatedTime);
+        exceptionParams.put("moduleCamelName", moduleCamelName);
+        FileUtil.writeFile(exceptionPath + File.separator + moduleCamelName + "Exception.java", ResourcesTemplateUtil.getTemplateContent(exceptionParams, EXCEPTION_TPL_PATH), GeneratorConstants.DEFAULT_CHARSET);
+
+        //生成测试代码
+        generateTestCode(projectInfo.getMainPackage() + ".util", javaCodePath + File.separator + projectInfo.getMainPackage().replace(".", File.separator) + File.separator + "util");
+        generateTestCode(projectInfo.getMainPackage() + ".ws", javaCodePath + File.separator + projectInfo.getMainPackage().replace(".", File.separator) + File.separator + "ws");
+    }
+
+    /**
+     * 生成测试代码
+     * @throws IOException
+     */
+    private void generateTest() throws IOException {
+        //mybatis-generator
+        if (projectInfo.getFrameworks().contains(FrameworkEnum.MYBATIES)) {
+            String generateCodePath = testCodePath + File.separator + "MybatisGeneratorTest.java";
+            String generatePropPath = testResPath + File.separator + "mybatisGenerator.properties";
+            FileUtil.writeFile(generateCodePath, ResourcesTemplateUtil.getTemplateContent(null, MYBATIS_GENERATOR_CODE_TPL_PATH), GeneratorConstants.DEFAULT_CHARSET);
+
+            Map<String, Object> mybatisGeneratorParams = new HashMap<String, Object>();
+            mybatisGeneratorParams.put("mainPackage", projectInfo.getMainPackage());
+            FileUtil.writeFile(generatePropPath, ResourcesTemplateUtil.getTemplateContent(mybatisGeneratorParams, MYBATIS_GENERATOR_PROP_TPL_PATH), GeneratorConstants.DEFAULT_CHARSET);
+        }
     }
 
     /**
      * 生成配置文件
      */
-    private void generatedResources() throws IOException {
+    private void generateResources() throws IOException {
         List<FrameworkEnum> frameworks = projectInfo.getFrameworks();
         boolean hasSpring = frameworks.contains(FrameworkEnum.SPRING_JAR) || frameworks.contains(FrameworkEnum.SPRING_WEB) || frameworks.contains(FrameworkEnum.SPRING_MVC);
         boolean hasMybatis = frameworks.contains(FrameworkEnum.MYBATIES);
@@ -173,59 +242,6 @@ public class SimpleInterfStragedyGenerator extends AbstractGenerator implements 
         String indexJspPath = webappPath + File.separator + "index.jsp";
         FileUtil.writeFile(webXmlPath, ResourcesTemplateUtil.getTemplateContent(null, WEB_XML_TPL_PATH), GeneratorConstants.DEFAULT_CHARSET);
         FileUtil.writeFile(indexJspPath, ResourcesTemplateUtil.getTemplateContent(null, INDEX_JSP_TPL_PATH), GeneratorConstants.DEFAULT_CHARSET);
-
-        //mybatis-generator
-        if (hasMybatis) {
-            String generateCodePath = testCodePath + File.separator + "MybatisGeneratorTest.java";
-            String generatePropPath = testResPath + File.separator + "mybatisGenerator.properties";
-            FileUtil.writeFile(generateCodePath, ResourcesTemplateUtil.getTemplateContent(null, MYBATIS_GENERATOR_CODE_TPL_PATH), GeneratorConstants.DEFAULT_CHARSET);
-
-            Map<String, Object> mybatisGeneratorParams = new HashMap<String, Object>();
-            mybatisGeneratorParams.put("mainPackage", projectInfo.getMainPackage());
-            FileUtil.writeFile(generatePropPath, ResourcesTemplateUtil.getTemplateContent(mybatisGeneratorParams, MYBATIS_GENERATOR_PROP_TPL_PATH), GeneratorConstants.DEFAULT_CHARSET);
-        }
-
-        //javaCode package
-        String packagePath = javaCodePath + File.separator + projectInfo.getMainPackage().replace(".", File.separator);
-        String constantsPath = packagePath + File.separator + "constants";
-        String daoPath = packagePath + File.separator + "dao";
-        String entityPath = packagePath + File.separator + "entity";
-        String enumsPath = packagePath + File.separator + "enums";
-        String servicePath = packagePath + File.separator + "service";
-        String exceptionPath = packagePath + File.separator + "exception";
-        String utilPath = packagePath + File.separator + "util";
-        String wsPath = packagePath + File.separator + "ws";
-        FileUtil.mkdirs(constantsPath, daoPath, entityPath, enumsPath, servicePath, exceptionPath, utilPath, wsPath);
-
-        //constants
-        String moduleName = projectInfo.getName();
-        String moduleCamelName = getCamelName(moduleName);
-        String generatedTime = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date());
-        Map<String, Object> constantsParams = new HashMap<String, Object>();
-        constantsParams.put("mainPackage", projectInfo.getMainPackage());
-        constantsParams.put("generatedTime", generatedTime);
-        constantsParams.put("moduleCamelName", moduleCamelName);
-        FileUtil.writeFile(constantsPath + File.separator + moduleCamelName + "Constant.java", ResourcesTemplateUtil.getTemplateContent(constantsParams, CONSTANTS_TPL_PATH), GeneratorConstants.DEFAULT_CHARSET);
-
-        //MsgEnum
-        String module_SplitName = moduleName.replace("-", "_");
-        Map<String, Object> msgEnumParams = new HashMap<String, Object>();
-        msgEnumParams.put("mainPackage", projectInfo.getMainPackage());
-        msgEnumParams.put("generatedTime", generatedTime);
-        msgEnumParams.put("moduleCamelName", moduleCamelName);
-        msgEnumParams.put("module_SplitName", module_SplitName);
-        FileUtil.writeFile(enumsPath + File.separator + moduleCamelName + "MsgEnum.java", ResourcesTemplateUtil.getTemplateContent(msgEnumParams, MSG_ENUM_TPL_PATH), GeneratorConstants.DEFAULT_CHARSET);
-
-        //exception
-        Map<String, Object> exceptionParams = new HashMap<String, Object>();
-        exceptionParams.put("mainPackage", projectInfo.getMainPackage());
-        exceptionParams.put("generatedTime", generatedTime);
-        exceptionParams.put("moduleCamelName", moduleCamelName);
-        FileUtil.writeFile(exceptionPath + File.separator + moduleCamelName + "Exception.java", ResourcesTemplateUtil.getTemplateContent(exceptionParams, EXCEPTION_TPL_PATH), GeneratorConstants.DEFAULT_CHARSET);
-
-        //生成测试代码
-        generateTestCode(projectInfo.getMainPackage() + ".util", javaCodePath + File.separator + projectInfo.getMainPackage().replace(".", File.separator) + File.separator + "util");
-        generateTestCode(projectInfo.getMainPackage() + ".ws", javaCodePath + File.separator + projectInfo.getMainPackage().replace(".", File.separator) + File.separator + "ws");
 
     }
 

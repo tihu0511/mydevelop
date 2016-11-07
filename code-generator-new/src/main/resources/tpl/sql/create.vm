@@ -1,0 +1,30 @@
+CREATE DATABASE IF NOT EXISTS `${schemaName}` DEFAULT CHARACTER SET utf8;
+
+USE `${schemaName}`;
+
+#foreach($table in $tables)
+/*Table structure for table `$table.name.toUpperCase()` */
+DROP TABLE IF EXISTS `$table.name.toUpperCase()`;
+CREATE TABLE `$table.name.toUpperCase()` (
+    `ID` int(11) NOT NULL AUTO_INCREMENT,
+#foreach($column in $table.sqlColumns)
+#set($nullableStr = "NULL")
+#if($column.isNotNullable)
+#set($nullableStr = "NOT NULL")
+#end
+#set($defaultStr = "DEFAULT NULL")
+#if($column.defaultValue)
+#set($defaultStr = "DEFAULT " + $column.defaultValue)
+#end
+#set($commentStr = "")
+#if($column.comment)
+    #set($commentStr = "COMMENT '" + $column.comment + "'")
+#end
+    `$column.name.toUpperCase()` $column.type.toLowerCase() $nullableStr $defaultStr $commentStr,
+#end
+    `CREATE_TIME` timestamp DEFAULT NULL COMMENT '创建时间',
+    `UPDATE_TIME` timestamp DEFAULT NULL COMMENT '更新时间',
+    PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+#end
