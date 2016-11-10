@@ -75,7 +75,7 @@ public class SqlGenerator {
                     column.setName(getCellString(row, 0));
                     column.setType(getCellString(row, 1));
                     String isNullableStr = getCellString(row, 2);
-                    column.setNotNullable(StringUtil.hasLength(isNullableStr) && "1".equals(isNullableStr));
+                    column.setNotNullable(StringUtil.hasLength(isNullableStr) && "Y".equals(isNullableStr));
                     String defaultValue = getCellString(row, 3);
                     column.setDefaultValue(StringUtil.hasLength(defaultValue) ? defaultValue : null);
                     column.setComment(getCellString(row, 4));

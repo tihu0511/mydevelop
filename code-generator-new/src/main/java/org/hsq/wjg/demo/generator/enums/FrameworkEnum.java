@@ -6,7 +6,9 @@ package org.hsq.wjg.demo.generator.enums;
 public enum FrameworkEnum {
     //依赖包的格式为 groupId:artifactId:version:excludes(groupId1|artifactId1#groupId2|artifactId2)
     SPRING_JAR(new String[]{
-        "org.springframework:spring-context"
+        "org.springframework:spring-context",
+        "org.aspectj:aspectjrt",
+        "org.aspectj:aspectjweaver"
     }),
     SPRING_WEB(new String[]{
             "org.springframework:spring-context",
