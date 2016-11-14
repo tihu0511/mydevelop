@@ -9,5 +9,6 @@
 
 
     <dubbo:reference interface="com.hsq.finance.qylc.regular.ws.IPurchaseWs" id="purchaseWs" version="1.0.0" />
+    <dubbo:reference interface="com.mandao.asset.nimble.ws.INimbleTaskSchedulerWs" id="nimbleTaskSchedulerWs" version="1.0.0" />
 
 </beans>
