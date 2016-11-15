@@ -11,10 +11,10 @@ public class BaseInDto implements Serializable {
     private String sno;
 
     public String getSno() {
-    return sno;
+        return sno;
     }
 
     public void setSno(String sno) {
-    this.sno = sno;
+        this.sno = sno;
     }
 }

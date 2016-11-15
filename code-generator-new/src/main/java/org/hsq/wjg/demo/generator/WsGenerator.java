@@ -2,14 +2,12 @@ package org.hsq.wjg.demo.generator;
 
 import com.hsq.component.file.FileUtil;
 import com.hsq.component.file.excel.ExcelUtil;
+import com.hsq.component.lang.CollectionUtil;
 import com.hsq.component.lang.StringUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.hsq.wjg.demo.generator.constants.GeneratorConstants;
-import org.hsq.wjg.demo.generator.pojo.ws.DtoEntity;
-import org.hsq.wjg.demo.generator.pojo.ws.FieldEntity;
-import org.hsq.wjg.demo.generator.pojo.ws.WsEntity;
-import org.hsq.wjg.demo.generator.pojo.ws.WsMethod;
+import org.hsq.wjg.demo.generator.pojo.ws.*;
 import org.hsq.wjg.demo.generator.util.NameUtil;
 import org.hsq.wjg.demo.generator.util.PrintUtil;
 import org.hsq.wjg.demo.generator.util.ResourcesTemplateUtil;
@@ -28,6 +26,7 @@ public class WsGenerator {
     private static final String DTO_TPL_PATH = "/tpl/ws/dto.vm";
     private static final String BASE_IN_DTO_TPL_PATH = "/tpl/ws/baseInDto.vm";
     private static final String BASE_OUT_DTO_TPL_PATH = "/tpl/ws/baseOutDto.vm";
+    private static final String VO_TPL_PATH = "/tpl/ws/vo.vm";
 
     private String mainPackage; //主包文件绝对路径
     private String commonProjectPath; //common模块路径
@@ -36,6 +35,8 @@ public class WsGenerator {
 
     private boolean hasNoBaseDto; //是否已经生成过baseDto
     private List<String> generatedDtoes = new ArrayList<String>(); //已经生成过的dto
+    private List<DtoEntity> dtoes = new ArrayList<DtoEntity>();
+    private List<VoEntity> voes = new ArrayList<VoEntity>();
 
     private static Map<String, String> javaTypeMap = new HashMap<String, String>();
 
@@ -74,9 +75,37 @@ public class WsGenerator {
         List<WsEntity> wsEntities = parseWsEntity(file);
 
         for (WsEntity wsEntity : wsEntities) {
+            String subPackage = wsEntity.getName().substring(0, 1).toLowerCase() + wsEntity.getName().substring(1);
             generateWs(wsEntity);
             generateWsImpl(wsEntity);
             generateDto(wsEntity);
+            generateVo(subPackage);
+        }
+    }
+
+    private void generateVo(String subPackage) throws IOException {
+        for (VoEntity vo : voes) {
+            Map<String, Object> params = new HashMap<String, Object>();
+            params.put("package", vo.getPackagePath());
+            params.put("generatedTime", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+            //imports
+            List<String> imports = new ArrayList<String>();
+            for (FieldEntity field : vo.getFields()) {
+                String typeImport = javaTypeMap.get(field.getType());
+                if (StringUtil.hasLength(typeImport)) {
+                    imports.add(typeImport);
+                }
+                if (field.getType().startsWith("List<")) {
+                    imports.add("java.util.List");
+                }
+            }
+            params.put("imports", imports);
+            Collections.sort(imports);
+            params.put("vo", vo);
+            String voContent = ResourcesTemplateUtil.getTemplateContent(params, VO_TPL_PATH);
+            String voFileDir = mainPackagePath + "dto" + File.separator + subPackage + File.separator;
+            FileUtil.mkdirs(voFileDir);
+            FileUtil.writeFile(voFileDir + vo.getName() + ".java", voContent);
         }
     }
 
@@ -135,6 +164,9 @@ public class WsGenerator {
             String typeImport = javaTypeMap.get(field.getType());
             if (StringUtil.hasLength(typeImport)) {
                 imports.add(typeImport);
+            }
+            if (field.getType().startsWith("List<")) {
+                imports.add("java.util.List");
             }
         }
         //BaseDto
@@ -250,20 +282,23 @@ public class WsGenerator {
             WsMethod wsMethod = null;
             DtoEntity inDto = null;
             DtoEntity outDto = null;
+            VoEntity vo = null;
             int splitRowIndex = -99;
-            int rowDtoType = 0;
+            int rowDtoType = 0; //1-入参字段行 2-出参字段行 3-出参Vo字段行
             for (int rowNum = sheet.getFirstRowNum(); rowNum <= sheet.getLastRowNum(); rowNum++) {
                 Row row = sheet.getRow(rowNum);
                 if (row == null || row.getFirstCellNum() < 0 || row.getLastCellNum() < 0) {
                     continue;
                 }
 
-                //处理行
+                //处理行 分为以下几种情况分别处理
+                //1.参数表格标题行
                 if (rowNum == splitRowIndex) {
                     continue;
                 }
                 String str = row.getCell(row.getFirstCellNum()).getStringCellValue();
-                if (str.indexOf("接口") >= 0) {
+                //2.新接口方法定义
+                if (str.contains("接口")) {
                     //新的接口方法
                     if (null != wsMethod) {
                         wsMethods.add(wsMethod);
@@ -271,40 +306,52 @@ public class WsGenerator {
                     wsMethod = new WsMethod();
                     wsMethod.setName(str.substring(str.indexOf("(") + 1, str.indexOf(")")));
                     wsMethod.setDesc(str.substring(0, str.indexOf("(")));
-                } else if (str.indexOf("入参") >= 0) {
+                }
+                //3.接口入参定义
+                else if (str.contains("入参")) {
                     inDto = new DtoEntity();
+                    dtoes.add(inDto);
                     wsMethod.setInDto(inDto); //设置接口方法的入参
                     inDto.setName(str.substring(str.indexOf("(") + 1, str.indexOf(")")));
                     inDto.setDesc(wsMethod.getDesc() + str.substring(0, str.indexOf("(")));
                     splitRowIndex = rowNum + 1; //设置入参标题分隔行
                     rowDtoType = 1; //设置为inDto
-                } else if (str.indexOf("出参") >= 0) {
+                }
+                //接口出参定义
+                else if (str.contains("出参") && str.contains("OutDto")) {
                     outDto = new DtoEntity();
+                    dtoes.add(outDto);
                     wsMethod.setOutDto(outDto); //设置接口方法的出参
                     outDto.setName(str.substring(str.indexOf("(") + 1, str.indexOf(")")));
                     outDto.setDesc(wsMethod.getDesc() + str.substring(0, str.indexOf("(")));
                     splitRowIndex = rowNum + 1; //设置出参标题分隔行
                     rowDtoType = 2; //设置为outDto
-                } else if (StringUtil.hasLength(str) && rowDtoType == 1) {
-                    int firstCell = row.getFirstCellNum();
-                    FieldEntity field = new FieldEntity();
-                    field.setName(row.getCell(firstCell + 1).getStringCellValue());
-                    field.setType(row.getCell(firstCell + 2).getStringCellValue());
-                    field.setIsMust("Y".equalsIgnoreCase(row.getCell(firstCell + 3).getStringCellValue()));
-                    field.setDesc(row.getCell(firstCell).getStringCellValue() + "," + row.getCell(firstCell + 4).getStringCellValue());
-                    inDto.addFiled(field);
-                } else if (StringUtil.hasLength(str) && rowDtoType == 2) {
-                    int firstCell = row.getFirstCellNum();
-                    FieldEntity field = new FieldEntity();
-                    field.setName(row.getCell(firstCell + 1).getStringCellValue());
-                    field.setType(row.getCell(firstCell + 2).getStringCellValue());
-                    field.setDesc(row.getCell(firstCell).getStringCellValue() + "," + row.getCell(firstCell + 3).getStringCellValue());
-                    outDto.addFiled(field);
-                } else {
+                }
+                //出参Vo定义
+                else if (str.contains("出参") && str.contains("Vo")) {
+                    vo = new VoEntity();
+                    vo.setName(str.substring(str.indexOf("(") + 1, str.indexOf(")")));
+                    vo.setDesc(str.substring(0, str.indexOf("(")));
+                    vo.setPackagePath(mainPackage + ".dto." + wsEntity.getName().substring(0, 1).toLowerCase() + wsEntity.getName().substring(1));
+                    voes.add(vo);
+                    rowDtoType = 3; //设置为Vo类型
+                }
+                //入参参数字段定义
+                else if (StringUtil.hasLength(str) && rowDtoType == 1) {
+                    inDto.addFiled(parseInField(row));
+                }
+                //出参参数字段定义
+                else if (StringUtil.hasLength(str) && rowDtoType == 2) {
+                    outDto.addFiled(parseOutField(row));
+                }
+                //出参Vo参数字段定义
+                else if (StringUtil.hasLength(str) && rowDtoType == 3) {
+                    vo.addFiled(parseOutField(row));
+                }
+                //其它，空行
+                else {
                     PrintUtil.println("%s页第%s行为空行或不可识别的列", sheetName, row.getRowNum());
                 }
-
-
             }
             if (null != wsMethod) {
                 wsMethods.add(wsMethod);
@@ -313,5 +360,25 @@ public class WsGenerator {
             wsEntities.add(wsEntity);
         }
         return wsEntities;
+    }
+
+    private FieldEntity parseInField(Row row) {
+        int firstCell = row.getFirstCellNum();
+        FieldEntity field = new FieldEntity();
+        field.setName(row.getCell(firstCell + 1).getStringCellValue());
+        field.setType(row.getCell(firstCell + 2).getStringCellValue());
+        field.setIsMust("Y".equalsIgnoreCase(row.getCell(firstCell + 3).getStringCellValue()));
+        field.setDesc(row.getCell(firstCell).getStringCellValue() + "," + row.getCell(firstCell + 4).getStringCellValue());
+        return field;
+    }
+
+    private FieldEntity parseOutField(Row row) {
+        int firstCell = row.getFirstCellNum();
+        FieldEntity field = new FieldEntity();
+        field.setName(row.getCell(firstCell + 1).getStringCellValue());
+        field.setType(row.getCell(firstCell + 2).getStringCellValue());
+        field.setDesc(row.getCell(firstCell).getStringCellValue() + ","
+                + (null != row.getCell(firstCell + 3) ? row.getCell(firstCell + 3).getStringCellValue() : ""));
+        return field;
     }
 }
