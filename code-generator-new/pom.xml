@@ -29,6 +29,11 @@
             <version>2.0-SNAPSHOT</version>
         </dependency>
         <dependency>
+            <groupId>com.hsq.component</groupId>
+            <artifactId>validation-common</artifactId>
+            <version>2.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
             <groupId>org.apache.velocity</groupId>
             <artifactId>velocity</artifactId>
             <version>1.7</version>

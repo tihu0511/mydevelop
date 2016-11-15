@@ -1,0 +1,20 @@
+package ${mainPackage}.dto.base;
+
+import org.hibernate.validator.constraints.NotEmpty;
+
+import java.io.Serializable;
+
+public class BaseInDto implements Serializable {
+    private static final long serialVersionUID = 1L;
+
+    @NotEmpty(message = "请求流水号不能为空")
+    private String sno;
+
+    public String getSno() {
+    return sno;
+    }
+
+    public void setSno(String sno) {
+    this.sno = sno;
+    }
+}

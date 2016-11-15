@@ -1,0 +1,50 @@
+package ${mainPackage}.dto.base;
+
+import java.io.Serializable;
+
+public class BaseOutDto implements Serializable {
+    private static final long serialVersionUID = 1L;
+
+    /** 成功 */
+    public static final int RET_OK = 1;
+    /** 失败 */
+    public static final int RET_NG = -1;
+    /** 系统异常 */
+    public static final int RET_FATAL = -99;
+
+    private int retCode; // 返回码
+    private String retMsg; // 返回消息
+    private String msgCode; // 消息码
+
+    public Boolean isSuccess(){
+        return retCode == RET_OK;
+    }
+
+    public Boolean isFatal(){
+        return retCode == RET_FATAL;
+    }
+
+    public int getRetCode() {
+        return retCode;
+    }
+
+    public void setRetCode(int retCode) {
+        this.retCode = retCode;
+    }
+
+    public String getRetMsg() {
+        return retMsg;
+    }
+
+    public void setRetMsg(String retMsg) {
+        this.retMsg = retMsg;
+    }
+
+    public String getMsgCode() {
+        return msgCode;
+    }
+
+    public void setMsgCode(String msgCode) {
+        this.msgCode = msgCode;
+    }
+}
