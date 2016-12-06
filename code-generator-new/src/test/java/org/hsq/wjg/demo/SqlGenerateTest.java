@@ -11,7 +11,7 @@ import java.io.IOException;
 public class SqlGenerateTest {
     @Test
     public void generate() throws IOException {
-        String file = "D:\\Desktop\\测试-代码生成.xlsx";
+        String file = "Y:\\\\baofoo\\\\codeGenerator\\\\database.xlsx";
         String schemaName = "MANDAO_PROD_FB";
         String resourcesPath = "F:\\CODE\\demos\\mydevelop\\code-generator-new\\src\\main";
         new SqlGenerator(schemaName, resourcesPath).generate(file);

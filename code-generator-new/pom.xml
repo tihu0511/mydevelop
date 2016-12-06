@@ -39,4 +39,8 @@
             <version>1.7</version>
         </dependency>
     </dependencies>
+
+    <build>
+        <finalName>code-generator</finalName>
+    </build>
 </project>
